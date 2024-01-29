@@ -5,6 +5,7 @@ const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
+
 // Specify port and initialize express
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -12,10 +13,12 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
+
 // Function for setting up and starting the server
 const startApolloServer = async () => {
   await server.start();
 
+  app.use('/graphql', expressMiddleware(server));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
   
@@ -26,8 +29,6 @@ const startApolloServer = async () => {
       res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
   }
-  
-  app.use('/graphql', expressMiddleware(server));
 
   db.once('open', () => {
     app.listen(PORT, () => {
