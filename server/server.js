@@ -1,11 +1,8 @@
-// Import Express.js
+// Import the necessary packages
 const express = require('express');
-// Import the ApolloServer class
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
-// Import nodejs package to resolve file paths
 const path = require('path');
-// Import graphql schema
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 // Specify port and initialize express
