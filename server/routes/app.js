@@ -1,4 +1,6 @@
-const User = require('./models/user');
+const User = require('./models/User');
+
+app.use(express.json());
 
 // Sign-up route
 app.post('/signup', async (req, res) => {
