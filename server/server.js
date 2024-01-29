@@ -18,9 +18,9 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
   await server.start();
 
-  app.use('/graphql', expressMiddleware(server));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+  app.use('/graphql', expressMiddleware(server));
   
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
@@ -29,6 +29,10 @@ const startApolloServer = async () => {
       res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
   }
+
+  db.on('error', (error) => {
+    console.error('MongoDB connection error:', error);
+  });
 
   db.once('open', () => {
     app.listen(PORT, () => {
